@@ -1,0 +1,21 @@
+{
+  "name": "leetcode2notion",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "crawl": "node crawl.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "child-process": "^1.0.2",
+    "jest": "^28.1.0",
+    "notion-client": "^6.12.6",
+    "prettier": "^2.6.2",
+    "puppeteer": "^13.7.0"
+  },
+  "type": "module"
+}
