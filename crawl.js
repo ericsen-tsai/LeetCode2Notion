@@ -86,8 +86,6 @@ async function sh(cmd) {
     ]
   })
 
-  console.log(questionTestCases)
-
   await page.screenshot({ path: `screenshots/test.jpeg` })
 
   var questionTemplate = await page.evaluate(() => {
@@ -106,6 +104,23 @@ async function sh(cmd) {
 
   await browser.close()
 
+  console.log("Question Template:")
+  console.log("\n")
+  console.log(questionTemplate)
+  console.log("\n")
+  console.log("Test Case:")
+  console.table([
+    {
+      Input: questionTestCases[0][0].trim(),
+      Output: questionTestCases[0][1].replace("\n", "").trim(),
+    },
+    {
+      Input: questionTestCases[1][0].trim(),
+      Output: questionTestCases[1][1].replace("\n", "").trim(),
+    },
+  ])
+  console.log("\n")
+
   var testCaseTemplates = []
   for (let i = 0; i < 2; i++) {
     testCaseTemplates.push(
@@ -117,13 +132,6 @@ async function sh(cmd) {
       }).toEqual(${questionTestCases[i][1]} )\n`
     )
   }
-
-  console.log("Question Template:")
-  console.log(questionTemplate)
-  console.log("\n")
-
-  console.log("Test Case:")
-  console.table(testCaseTemplates)
 
   var comment = `/*\n\nQuestion: ${questionTitle}\n\nDiffculty: ${diffculty}\n\n${description} \n*/`
   var fileName = `questions/q${questionNumber}`
