@@ -14,6 +14,14 @@ async function sh(cmd) {
   })
 }
 
+if (!fs.existsSync("./screenshots")) {
+  fs.mkdirSync("./screenshots")
+}
+
+if (!fs.existsSync("./questions")) {
+  fs.mkdirSync("./questions")
+}
+
 ;(async () => {
   var questionNumber = process.argv.slice(2)
   if (questionNumber.length === 0) {
@@ -128,8 +136,8 @@ async function sh(cmd) {
         expect(${functionName}({${questionTestCases[i][0].replace(
         /(=)/g,
         ":"
-      )} })) 
-      }).toEqual(${questionTestCases[i][1]} )\n`
+      )} })).toEqual(${questionTestCases[i][1]} ) 
+      })\n`
     )
   }
 
@@ -139,11 +147,19 @@ async function sh(cmd) {
   var fileFullName = fs.existsSync(fileName + ".js")
     ? fileName + "-temp.js"
     : fileName + ".js"
-  var fileContent = `${comment}\n\n${questionTemplate}\n\n${testCaseTemplates.join(
-    "\n"
-  )}`
+  var testFileFullName = fileName + ".test.js"
 
-  fs.writeFile(fileFullName, fileContent, (err) => {
+  var fileMainContent = `${comment}\n\n${questionTemplate}\n\nexport {${functionName}}\n\n`
+
+  var fileTestContent = `import {${functionName}} from "./${
+    fileFullName.split("/")[1]
+  }"\n\n${testCaseTemplates.join("\n")}`
+
+  fs.writeFile(fileFullName, fileMainContent, (err) => {
+    if (err) throw err
+  })
+
+  fs.writeFile(testFileFullName, fileTestContent, (err) => {
     if (err) throw err
   })
 
@@ -152,8 +168,11 @@ async function sh(cmd) {
     : `File of question ${questionNumber} is created successfully.\n`
   console.log(createFileMessage)
 
-  let { stdout } = await sh(`npx prettier --write ./${fileFullName}`)
-  console.log(`Prettier: ${stdout}`)
+  await sh(`npx prettier --write ./${fileFullName}`)
+  console.log(`Prettier: ${fileFullName}`)
+
+  await sh(`npx prettier --write ./${testFileFullName}`)
+  console.log(`Prettier: ${testFileFullName}`)
 
   console.log("Done.")
   return
