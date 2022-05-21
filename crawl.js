@@ -2,6 +2,14 @@ import fs from "fs"
 import puppeteer from "puppeteer"
 import { exec } from "child_process"
 
+if (!fs.existsSync("./screenshots")) {
+  fs.mkdirSync("./screenshots")
+}
+
+if (!fs.existsSync("./questions")) {
+  fs.mkdirSync("./questions")
+}
+
 async function sh(cmd) {
   return new Promise(function (resolve, reject) {
     exec(cmd, (err, stdout, stderr) => {
@@ -14,18 +22,15 @@ async function sh(cmd) {
   })
 }
 
-if (!fs.existsSync("./screenshots")) {
-  fs.mkdirSync("./screenshots")
-}
-
-if (!fs.existsSync("./questions")) {
-  fs.mkdirSync("./questions")
-}
-
 ;(async () => {
   var questionNumber = process.argv.slice(2)
-  if (questionNumber.length === 0) {
-    throw "Please enter a question number"
+  try {
+    if (questionNumber.length === 0) {
+      throw "Please enter a question number"
+    }
+  } catch (e) {
+    console.log(e)
+    return
   }
 
   const browser = await puppeteer.launch()
@@ -94,7 +99,7 @@ if (!fs.existsSync("./questions")) {
     ]
   })
 
-  await page.screenshot({ path: `screenshots/test.jpeg` })
+  // await page.screenshot({ path: `screenshots/test.jpeg` })
 
   var questionTemplate = await page.evaluate(() => {
     // document.querySelector("li[data-cy='lang-select-JavaScript']").click()

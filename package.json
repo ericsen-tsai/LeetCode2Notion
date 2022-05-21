@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "crawl": "node crawl.js",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch ./questions"
   },
   "keywords": [],
   "author": "",
