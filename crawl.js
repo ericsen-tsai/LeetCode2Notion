@@ -40,7 +40,7 @@ async function sh(cmd) {
 
   await page.type("input[placeholder='Search questions']", questionNumber)
 
-  await page.waitForTimeout(1200)
+  await page.waitForTimeout(2000)
 
   var questionTitle = await page.evaluate(() => {
     return document.querySelectorAll('a[href^="/problems/"]')[3].innerText
@@ -61,7 +61,7 @@ async function sh(cmd) {
 
   console.log(`Going to: https://leetcode.com/problems/${dashQuestionName}`)
 
-  await page.waitForTimeout(1000)
+  await page.waitForTimeout(5000)
 
   var diffculty = await page.evaluate(() => {
     return document.querySelectorAll("div[diff]")[0].innerText
